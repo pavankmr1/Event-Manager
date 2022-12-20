@@ -1,0 +1,99 @@
+{% extends "base.html" %} {% block title %} Home {% endblock %} 
+
+{% block style %}
+<style>
+	.card{
+		margin:  20px;
+	}
+
+  .fas{
+    color: red;
+  }
+  .container-custom {
+    display: flex;
+    padding: 20px;
+  }
+
+  .fa-heart {
+    font-size: 35px;
+  }
+
+</style>
+
+
+{% endblock %}
+
+{% block content %}
+{% if message %}
+<br>
+  <center><h3>{{message}}</h3></center>
+{% endif %}
+{% for event in events %}
+<div class="card-group" style="background-color: #a6dbfa;">
+  <div class="card">
+    <div class="container-custom" style="background-color: lightyellow;">
+    <img class="card-img-top" src="{{event.image.url}}" alt="Event Image" style="height: auto; width: 200px; border-radius: 10px; ">
+    <div class="card-body" style="display: inline-block;">
+      <h3 class="card-title">{{event.title}}</h3>
+      <p class="card-text">{{event.description}}</p>
+      {% if event.id in liked %}
+      <a class="clicked" onclick="clicked(this, '{{event.id}}')"><i class="fas fa-heart"></i></a>
+      {% else %}
+      <a class="clicked" onclick="clicked(this, '{{event.id}}')"><i class="far fa-heart"></i></a>
+      {% endif %}
+    </div>
+  </div>
+    <div class="card-footer">
+      <small class="text-muted"> <strong>Event Timings: </strong> {{event.time}} {{event.date}} <br> <strong>Location: </strong>{{event.location}}</small>
+    </div>
+  </div>
+  <br>
+</div>
+
+<script>
+  function clicked(element, event_id)
+  {
+    const userName = "{{request.user.username}}";
+    if(userName=="")
+    {
+      window.open("/login", "_self")
+    }
+    // console.log(element);
+    // console.log(event_id);
+    event_id = Number(event_id);
+    console.log(event_id)
+    $.ajax({
+      type:'POST',
+      url: "{% url 'clicked' %}",
+
+      data: {
+        id: event_id,
+        csrfmiddlewaretoken: '{{ csrf_token }}',
+        dataType: "json",
+      },
+      success: function(data) {
+        console.log(data)
+        if(element.childNodes[0].classList.contains("fas"))
+        {
+          element.childNodes[0].classList.remove("fas");
+          element.childNodes[0].classList.add("far");
+        }
+        else
+        {
+          element.childNodes[0].classList.remove("far");
+          element.childNodes[0].classList.add("fas");
+        }
+      },
+      error: function(err){
+        console.error(err);
+      }
+    });
+  }
+ 
+</script>
+{% empty %}
+
+<center>Sorry! Nothing here. May be  <a href="{% url 'create_event' %}">create an event</a></center>
+
+{% endfor %}
+{% endblock %}

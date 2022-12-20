@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block title %}Create Event{% endblock %}
+
+{% block style %}
+
+<style>
+	form {
+		padding: 10px;
+		display: block;
+		width: 400px;
+		margin-left: auto;
+		margin-right: auto;
+		border: 1px solid black;
+		border-radius: 5px;
+	}
+</style>
+
+{% endblock %}
+
+{% block content %}
+
+<form method="post" enctype="multipart/form-data">
+	<h3>Create Event Form</h3>
+	<hr>
+	{% csrf_token %}
+
+
+  <div class="form-group">
+    <label for="exampleInputEmail1">Title</label>
+    <input type="text" name="title" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter Title" required>
+  </div>
+  <div class="form-group">
+    <label for="exampleFormControlTextarea1">Description</label>
+    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name="description"></textarea>
+  </div>
+  <div class="form-group">
+    <label for="exampleFormControlFile1">Upload Image</label>
+    <input type="file" class="form-control-file" id="exampleFormControlFile1" name="image" required>
+  </div>
+  <div class="form-group">
+    <label for="exampleFormControlFile1">Date</label>
+    <input type="date" class="form-control" id="exampleFormControlFile1" name="date" required>
+  </div>
+  <div class="form-group">
+    <label for="exampleFormControlFile1">Time</label>
+    <input type="time" class="form-control" id="exampleFormControlFile1" name="time" required>
+  </div>
+  <div class="form-group">
+    <label for="exampleFormControlFile1">Location</label>
+    <input type="text" class="form-control" id="exampleFormControlFile1" name="location" required>
+  </div>
+
+
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+
+
+
+
+{% endblock %}
