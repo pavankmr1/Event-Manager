@@ -117,7 +117,10 @@ def clicked(request):
     custom_user_object = CustomUser.objects.get(user=request.user)
     liked = custom_user_object.liked_events.all()
 
-    if request.is_ajax():
+    def is_ajax(request):
+        return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
+
+    if is_ajax(request):
         if event not in liked:
             custom_user_object.liked_events.add(event)
             custom_user_object.save()
